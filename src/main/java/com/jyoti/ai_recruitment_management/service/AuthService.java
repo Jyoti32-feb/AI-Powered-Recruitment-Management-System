@@ -1,7 +1,9 @@
 package com.jyoti.ai_recruitment_management.service;
 
 import com.jyoti.ai_recruitment_management.dto.RegisterRequest;
+import com.jyoti.ai_recruitment_management.dto.UserResponse;
 import com.jyoti.ai_recruitment_management.entity.User;
+import com.jyoti.ai_recruitment_management.exception.EmailAlreadyExitsException;
 import com.jyoti.ai_recruitment_management.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,11 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User register(RegisterRequest request) {
+    public UserResponse register(RegisterRequest request) {
 
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already registered");
+            throw new EmailAlreadyExitsException("Email already registered");
         }
 
 
@@ -37,6 +39,8 @@ public class AuthService {
         user.setRole(request.getRole());
 
 
-        return userRepository.save(user);
+        User saveduser= userRepository.save(user);
+
+        return new UserResponse(saveduser.getId(), saveduser.getName(), saveduser.getEmail(), saveduser.getRole());
     }
 }
