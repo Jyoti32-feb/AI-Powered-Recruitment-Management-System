@@ -1,5 +1,6 @@
 package com.jyoti.ai_recruitment_management.controller;
 
+import com.jyoti.ai_recruitment_management.dto.LoginRequest;
 import com.jyoti.ai_recruitment_management.dto.RegisterRequest;
 import com.jyoti.ai_recruitment_management.dto.UserResponse;
 import com.jyoti.ai_recruitment_management.entity.User;
@@ -24,6 +25,13 @@ public class AuthController {
 
         UserResponse userResponse = authService.register(request);
 
+        return ResponseEntity.ok( userResponse);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> login(
+            @Valid @RequestBody LoginRequest request){
+        UserResponse userResponse = authService.login(request);
         return ResponseEntity.ok( userResponse);
     }
 
