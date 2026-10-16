@@ -14,6 +14,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Service
 public class JwtService {
 
@@ -48,12 +50,13 @@ public class JwtService {
         return extractAllClaims(token).getSubject();
     }
 
-    public boolean isTokenValid(String token, User user) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             Claims claims = extractAllClaims(token);
 
-            return claims.getSubject().equals(user.getEmail())
+            return claims.getSubject().equals(userDetails.getUsername())
                     && claims.getExpiration().after(new Date());
+
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
