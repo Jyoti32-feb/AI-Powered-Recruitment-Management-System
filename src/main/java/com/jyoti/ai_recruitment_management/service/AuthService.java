@@ -3,6 +3,7 @@ package com.jyoti.ai_recruitment_management.service;
 import com.jyoti.ai_recruitment_management.dto.LoginRequest;
 import com.jyoti.ai_recruitment_management.dto.RegisterRequest;
 import com.jyoti.ai_recruitment_management.dto.UserResponse;
+import com.jyoti.ai_recruitment_management.entity.Role;
 import com.jyoti.ai_recruitment_management.entity.User;
 import com.jyoti.ai_recruitment_management.exception.EmailAlreadyExitsException;
 import com.jyoti.ai_recruitment_management.exception.InvalidCredentialsException;
@@ -44,7 +45,7 @@ public class AuthService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        user.setRole(request.getRole());
+        user.setRole(Role.CANDIDATE);
 
 
         User saveduser= userRepository.save(user);

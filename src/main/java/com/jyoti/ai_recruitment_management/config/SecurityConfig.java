@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login"
-                        ).permitAll()
+                        ).permitAll().requestMatchers("/api/auth/hello").hasRole("RECRUITER")
                         .anyRequest().authenticated()
                 )
 

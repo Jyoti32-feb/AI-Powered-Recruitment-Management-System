@@ -19,8 +19,6 @@ public class RegisterRequest {
     @Size(min = 6)
     private String password;
 
-    @NotNull
-    private Role role;
 
     public RegisterRequest() {
     }
@@ -49,11 +47,5 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
-    }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }
