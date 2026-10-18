@@ -40,4 +40,12 @@ public class JobController {
         List<JobResponse> jobs = jobService.getOpenJobs();
         return ResponseEntity.ok(jobs);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<JobResponse> getJobById(
+            @PathVariable Long id) {
+
+        JobResponse response = jobService.getJobById(id);
+
+        return ResponseEntity.ok(response);
+    }
 }

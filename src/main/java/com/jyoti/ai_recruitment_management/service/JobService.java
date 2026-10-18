@@ -76,4 +76,16 @@ public class JobService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+
+    public JobResponse getJobById(Long id) {
+
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Job not found with id: " + id
+                        )
+                );
+
+        return mapToResponse(job);
+    }
 }
