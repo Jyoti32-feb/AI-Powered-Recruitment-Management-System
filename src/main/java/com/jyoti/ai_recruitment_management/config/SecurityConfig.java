@@ -37,13 +37,14 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login"
-                        ).permitAll().requestMatchers("/api/auth/hello").hasRole("RECRUITER")
-                        .anyRequest().authenticated()
-                )
-
+                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/hello").hasRole("RECRUITER")
+                .requestMatchers(
+                        org.springframework.http.HttpMethod.POST,
+                        "/api/jobs"
+                ).hasRole("RECRUITER")
+                .anyRequest().authenticated()
+        )
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
