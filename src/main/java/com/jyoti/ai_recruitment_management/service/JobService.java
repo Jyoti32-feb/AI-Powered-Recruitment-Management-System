@@ -8,6 +8,7 @@ import com.jyoti.ai_recruitment_management.entity.User;
 import com.jyoti.ai_recruitment_management.exception.ResourceNotFoundException;
 import com.jyoti.ai_recruitment_management.repository.JobRepository;
 import com.jyoti.ai_recruitment_management.repository.UserRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -87,5 +88,49 @@ public class JobService {
                 );
 
         return mapToResponse(job);
+    }
+
+    public JobResponse updateJob(
+            Long jobId,
+            JobRequest request,
+            String recruiterEmail) {
+
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Job not found with id: " + jobId
+                        )
+                );
+
+        User recruiter = userRepository.findByEmail(recruiterEmail)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Recruiter not found")
+                );
+
+        if (!job.getRecruiter().getId().equals(recruiter.getId())) {
+            throw new AccessDeniedException(
+                    "You are not allowed to update this job"
+            );
+        }
+
+        if (request.getSalaryMin().compareTo(request.getSalaryMax()) > 0) {
+            throw new IllegalArgumentException(
+                    "Minimum salary cannot exceed maximum salary"
+            );
+        }
+
+        job.setTitle(request.getTitle());
+        job.setDescription(request.getDescription());
+        job.setRequiredSkills(request.getRequiredSkills());
+        job.setLocation(request.getLocation());
+        job.setEmploymentType(request.getEmploymentType());
+        job.setSalaryMin(request.getSalaryMin());
+        job.setSalaryMax(request.getSalaryMax());
+
+        Job updatedJob = jobRepository.save(job);
+
+        return mapToResponse(updatedJob);
+
+
     }
 }

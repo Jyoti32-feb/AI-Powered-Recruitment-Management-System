@@ -60,6 +60,11 @@ public class SecurityConfig {
                                 "/api/jobs/*"
                         ).permitAll()
 
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/jobs/*"
+                        ).hasRole("RECRUITER")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

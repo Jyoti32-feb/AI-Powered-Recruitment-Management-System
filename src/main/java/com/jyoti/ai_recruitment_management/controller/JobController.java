@@ -48,4 +48,21 @@ public class JobController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<JobResponse> updateJob(
+            @PathVariable Long id,
+            @Valid @RequestBody JobRequest request,
+            Authentication authentication) {
+        System.out.println("Update job endpoint reached");
+        System.out.println("Authenticated user: " + authentication.getName());
+        System.out.println("Authorities: " + authentication.getAuthorities());
+
+        String recruiterEmail = authentication.getName();
+
+        JobResponse response =
+                jobService.updateJob(id, request, recruiterEmail);
+
+        return ResponseEntity.ok(response);
+    }
 }
