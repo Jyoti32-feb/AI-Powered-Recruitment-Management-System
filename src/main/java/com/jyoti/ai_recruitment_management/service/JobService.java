@@ -133,4 +133,32 @@ public class JobService {
 
 
     }
+
+    public JobResponse closeJob(Long jobId, String recruiterEmail) {
+
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Job not found with id: " + jobId
+                        )
+                );
+
+        User recruiter = userRepository.findByEmail(recruiterEmail)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Recruiter not found")
+                );
+
+        if (!job.getRecruiter().getId().equals(recruiter.getId())) {
+            throw new AccessDeniedException(
+                    "You are not allowed to close this job"
+            );
+        }
+
+        job.setStatus(JobStatus.CLOSED);
+
+        Job closedJob = jobRepository.save(job);
+
+        return mapToResponse(closedJob);
+    }
+
 }

@@ -54,9 +54,7 @@ public class JobController {
             @PathVariable Long id,
             @Valid @RequestBody JobRequest request,
             Authentication authentication) {
-        System.out.println("Update job endpoint reached");
-        System.out.println("Authenticated user: " + authentication.getName());
-        System.out.println("Authorities: " + authentication.getAuthorities());
+
 
         String recruiterEmail = authentication.getName();
 
@@ -65,4 +63,18 @@ public class JobController {
 
         return ResponseEntity.ok(response);
     }
+
+
+    @PatchMapping("/{id}/close")
+    public ResponseEntity<JobResponse> closeJob(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        String recruiterEmail = authentication.getName();
+
+        JobResponse response = jobService.closeJob(id, recruiterEmail);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

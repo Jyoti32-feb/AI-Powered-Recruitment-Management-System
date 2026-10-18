@@ -4,6 +4,7 @@ package com.jyoti.ai_recruitment_management.config;
 import com.jyoti.ai_recruitment_management.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -64,6 +65,10 @@ public class SecurityConfig {
                                 org.springframework.http.HttpMethod.PUT,
                                 "/api/jobs/*"
                         ).hasRole("RECRUITER")
+
+                        .requestMatchers(HttpMethod.PATCH, "/api/jobs/*/close")
+                        .hasRole("RECRUITER")
+
 
                         .anyRequest().authenticated()
                 )
