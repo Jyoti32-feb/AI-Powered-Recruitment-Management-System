@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {
@@ -31,5 +33,11 @@ public class JobController {
                 jobService.createJob(request, recruiterEmail);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/open-jobs")
+    public ResponseEntity<List<JobResponse>> getOpenJobs() {
+        List<JobResponse> jobs = jobService.getOpenJobs();
+        return ResponseEntity.ok(jobs);
     }
 }

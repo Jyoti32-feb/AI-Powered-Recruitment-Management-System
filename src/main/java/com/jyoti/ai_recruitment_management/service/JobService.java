@@ -3,11 +3,15 @@ package com.jyoti.ai_recruitment_management.service;
 import com.jyoti.ai_recruitment_management.dto.JobRequest;
 import com.jyoti.ai_recruitment_management.dto.JobResponse;
 import com.jyoti.ai_recruitment_management.entity.Job;
+import com.jyoti.ai_recruitment_management.entity.JobStatus;
 import com.jyoti.ai_recruitment_management.entity.User;
 import com.jyoti.ai_recruitment_management.exception.ResourceNotFoundException;
 import com.jyoti.ai_recruitment_management.repository.JobRepository;
 import com.jyoti.ai_recruitment_management.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -63,5 +67,13 @@ public class JobService {
                 job.getRecruiter().getId(),
                 job.getRecruiter().getName()
         );
+    }
+
+    public List<JobResponse> getOpenJobs() {
+        List<Job> jobs = jobRepository.findByStatus(JobStatus.OPEN);
+
+        return jobs.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 }
