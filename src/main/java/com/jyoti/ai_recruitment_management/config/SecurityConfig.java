@@ -69,6 +69,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/jobs/*/close")
                         .hasRole("RECRUITER")
 
+                        .requestMatchers(HttpMethod.POST, "/api/candidate/profile")
+                        .hasRole("CANDIDATE")
 
                         .anyRequest().authenticated()
                 )
