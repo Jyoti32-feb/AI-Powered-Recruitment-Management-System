@@ -98,5 +98,41 @@ public class CandidateProfileService {
     }
 
 
+    public CandidateProfileResponse updateMyProfile(
+            CandidateProfileRequest request,
+            String userEmail) {
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found")
+                );
+
+        if (user.getRole() != Role.CANDIDATE) {
+            throw new AccessDeniedException(
+                    "Only candidates can update candidate profiles"
+            );
+        }
+
+        CandidateProfile profile = candidateProfileRepository
+                .findByUserId(user.getId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Candidate profile not found"
+                        )
+                );
+
+        profile.setPhoneNumber(request.getPhoneNumber());
+        profile.setSkills(request.getSkills());
+        profile.setYearsOfExperience(request.getYearsOfExperience());
+        profile.setCareerPreference(request.getCareerPreference());
+
+        CandidateProfile updatedProfile =
+                candidateProfileRepository.save(profile);
+
+        return mapToResponse(updatedProfile);
+    }
+
+
+
 
 }

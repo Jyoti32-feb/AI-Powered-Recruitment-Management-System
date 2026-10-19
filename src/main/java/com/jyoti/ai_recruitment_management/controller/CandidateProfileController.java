@@ -48,4 +48,19 @@ public class CandidateProfileController {
         return ResponseEntity.ok(response);
     }
 
+
+    @PutMapping
+    public ResponseEntity<CandidateProfileResponse> updateMyProfile(
+            @Valid @RequestBody CandidateProfileRequest request,
+            Authentication authentication) {
+
+        String userEmail = authentication.getName();
+
+        CandidateProfileResponse response =
+                candidateProfileService.updateMyProfile(request, userEmail);
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }
