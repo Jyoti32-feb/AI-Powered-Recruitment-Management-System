@@ -33,4 +33,19 @@ public class CandidateProfileController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+
+    @GetMapping
+    public ResponseEntity<CandidateProfileResponse> getMyProfile(
+            Authentication authentication) {
+
+
+        String userEmail = authentication.getName();
+
+        CandidateProfileResponse response =
+                candidateProfileService.getMyProfile(userEmail);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

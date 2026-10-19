@@ -73,4 +73,30 @@ public class CandidateProfileService {
     }
 
 
+    public CandidateProfileResponse getMyProfile(String userEmail) {
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found")
+                );
+
+        if (user.getRole() != Role.CANDIDATE) {
+            throw new AccessDeniedException(
+                    "Only candidates can access candidate profiles"
+            );
+        }
+
+        CandidateProfile profile = candidateProfileRepository
+                .findByUserId(user.getId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Candidate profile not found"
+                        )
+                );
+
+        return mapToResponse(profile);
+    }
+
+
+
 }
