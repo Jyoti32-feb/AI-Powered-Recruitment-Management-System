@@ -79,6 +79,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/candidate/profile")
                         .hasRole("CANDIDATE")
 
+                        .requestMatchers(HttpMethod.POST, "/api/applications")
+                        .hasRole("CANDIDATE")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
