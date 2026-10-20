@@ -54,4 +54,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(ex.getMessage());
     }
+    @ExceptionHandler(DuplicateJobApplicationException.class)
+    public ResponseEntity<String> handleDuplicateJobApplicationException(
+            DuplicateJobApplicationException ex){
+        return ResponseEntity.
+                status(HttpStatus.CONFLICT).
+                body(ex.getMessage());
+    }
 }

@@ -3,6 +3,7 @@ package com.jyoti.ai_recruitment_management.service;
 
 import com.jyoti.ai_recruitment_management.dto.JobApplicationRequest;
 import com.jyoti.ai_recruitment_management.entity.*;
+import com.jyoti.ai_recruitment_management.exception.DuplicateJobApplicationException;
 import com.jyoti.ai_recruitment_management.repository.JobApplicationRepository;
 import com.jyoti.ai_recruitment_management.repository.CandidateProfileRepository;
 import com.jyoti.ai_recruitment_management.repository.JobRepository;
@@ -77,7 +78,7 @@ public class JobApplicationService {
                         );
 
         if (alreadyApplied) {
-            throw new IllegalArgumentException(
+            throw new DuplicateJobApplicationException(
                     "You have already applied for this job"
             );
         }
@@ -89,8 +90,17 @@ public class JobApplicationService {
         application.setStatus(ApplicationStatus.APPLIED);
 
 
-        JobApplication savedApplication =
-                jobApplicationRepository.save(application);
+
+        JobApplication savedApplication;
+
+        try {
+            savedApplication =
+                    jobApplicationRepository.saveAndFlush(application);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new DuplicateJobApplicationException(
+                    "You have already applied for this job"
+            );
+        }
 
 
         return new JobApplicationResponse(
